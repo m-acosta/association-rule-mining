@@ -1,9 +1,11 @@
 #-------------------------------------------------------------------------
-# AUTHOR: your name
-# FILENAME: title of the source file
-# SPECIFICATION: description of the program
+# AUTHOR: Michael Acosta
+# FILENAME: association_rule_mining.py
+# SPECIFICATION: This program aims to find strong rules related to 
+#                   supermarket products. It shows various metrics for each 
+#                   rule that meets minimum requirements.
 # FOR: CS 4210- Assignment #5
-# TIME SPENT: how long it took you to complete the assignment
+# TIME SPENT: ~1 hour
 #-----------------------------------------------------------*/
 
 import pandas as pd
@@ -42,6 +44,8 @@ encoded_vals = []
 for index, row in df.iterrows():
 
     labels = {}
+    for item in itemset:
+        labels[item] = 1 if item in row.values else 0
 
     encoded_vals.append(labels)
 
@@ -60,6 +64,19 @@ rules = association_rules(freq_items, metric="confidence", min_threshold=0.6)
 #Prior: 0.4380952380952381
 #Gain in Confidence: 52.17391304347825
 #-->add your python code below
+for index, row in rules.iterrows():
+    antecedent = ", ".join(list(row['antecedents']))
+    consequent = ", ".join(list(row['consequents']))
+    support = row['support']
+    confidence = row['confidence']
+    prior = row['leverage']
+    gain_in_confidence = row['lift']
+    
+    print(f"{antecedent} -> {consequent}")
+    print(f"Support: {support}")
+    print(f"Confidence: {confidence}")
+    print(f"Prior: {prior}")
+    print(f"Gain in Confidence: {gain_in_confidence}\n")
 
 #To calculate the prior and gain in confidence, find in how many transactions the consequent of the rule appears (the supporCount below). Then,
 #use the gain formula provided right after.
